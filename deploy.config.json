@@ -1,23 +1,15 @@
 {
-  "atmAuction": {
-    "lst": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
-  },
-  "bondAuction": {
-    "usdc": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
-  },
-  "deposit": {
-    "cap": 10000000000000000000000,
-    "conversionRate": 30000,
-    "duration": 172800,
-    "signer": "0xE0E763117E4ff89eEbeFCC4856C1019dd5637452",
-    "startTime": 1741626000
-  },
   "governor": {
-    "proposalThreshold": 0,
+    "name": "Turnkey Governor",
+    "proposalThreshold": 1000000000000000000,
     "quorumPercentage": 4,
-    "timelockDelay": 86400,
     "votingDelay": 7200,
     "voteExtension": 86400,
     "votingPeriod": 50400
+  },
+  "token": {
+    "name": "Turnkey",
+    "owner": "0x0000000000000000000000000000000000000000",
+    "symbol": "ABC"
   }
 }

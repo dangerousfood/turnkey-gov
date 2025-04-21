@@ -1,115 +1,66 @@
-### **EthStrategy ($ETHXR)**
+# Turnkey Governor
+Turnkey Governor is a repository used to simply deploy OpenZeppelin Governor and ERC-20 token with safe defaults.
 
-#### **What is it?**
+## Requirements
+- git
+- node
+- pnpm
+- forge (foundry)
 
-EtherStrategy (\$ETHXR) is a tokenized vehicle for ETH accumulation, giving \$ETHXR holders a claim on a growing pool of ETH managed through fully transparent, onchain strategies.
+## Deploy Guide
 
-Think of EtherStrategy as **MicroStrategy, but entirely onchain and transparent**. If you’re familiar with how MicroStrategy operates, you already get the gist.
-
----
-
-### **TL;DR**
-
-1. **Deposit Pool:**  
-   * The protocol starts with an initial ETH pool funded by early depositors.  
-   * Early backers receive $ETHXR tokens, aligning their incentives with the protocol’s growth.
-   * Global deposit cap at 10,000 $ETH
-   * Individual addresses capped at 100 $ETH
-2. **Growth Mechanisms:**  
-   * **Convertible Bonds:** Users buy bonds with USDC. Proceeds are used to buy ETH, growing the pool and increasing $ETHXR’s value.  
-   * **ATM Offerings:** If $ETHXR trades at a premium to NAV, new tokens are sold at the market price. Proceeds are used to acquire more ETH.  
-   * **Net Asset Value (NAV) Options** \$oETHxr is an options contract that can be minted by governance that allows a holder to mint \$ETHXR by exchanging a proportional amount of NAV tokens relative to the total supply of $ETHXR
-   * **Redemptions:** If $ETHXR trades at a discount to NAV, holders can vote to redeem ETH.
-
-   ---
-
-### **How It Works**
-
-#### **1\. Convertible Bonds (USDC for ETH Acquisition):**
-
-EtherStrategy raises funds by issuing **onchain convertible bonds**, which are structured as follows:
-
-* **Initial Offering:**  
-  * Bonds are sold at a fixed price in USDC with a maturity date and a strike price in $ETHXR.  
-* **Conversion Option:**  
-  * At maturity, bondholders can convert bonds into $ETHXR tokens if the token’s market price exceeds the strike price.  
-  * Conversion is performed onchain, allowing bondholders to capture appreciation in $ETHXR’s value.  
-* **Redemption Option:**  
-  * If $ETHXR’s market price does not exceed the strike price, bondholders can redeem the bonds for their principal in USDC, potentially with a fixed yield.  
-* **Protocol Benefits:**  
-  * USDC raised is immediately used to buy ETH, growing the pool and boosting $ETHXR’s NAV.  
-  * Conversion aligns bondholder incentives with the protocol’s long-term success.
-
-  ---
-
-#### **2\. At-The-Money (ATM) Offerings:**
-
-If $ETHXR trades at a **premium to NAV**, EtherStrategy issues new tokens to capture demand and grow the ETH pool.
-
-* **Mechanism:**  
-  * New $ETHXR tokens are sold at the market price, capped at a percentage per week to maintain upside for existing holders.  
-  * Proceeds are used to buy ETH and add it to the pool.  
-* **Benefits:**  
-  * Prevents runaway premiums by issuing tokens only when $ETHXR is overvalued.  
-  * Scales the ETH pool efficiently, increasing NAV for all holders.
-
-#### **3\. Net Asset Value (NAV) Options:**
-* **Mechanism:**
-  * Allows the governance to reward contributors or other parties like market makers for their contributions
-* **Benefits:**  
-  * Zero cost to the platform and are only valuable if $ETHXR exogenously trades at a premium to NAV 
-
-#### **4\. Governance:**
-* **Mechanism:**
-  * From genesis, $ETHXR holders are in complete control of the protocol
-  * $ETHXR is both the token representing the net asset value and the governance token
-  * Protocol is designed to be egalitarian and takes no fee on deposits or redemption
-  * Governance is vulnerable to a 51% attack, to mitigate this governance includes a rage quit functionality
-    * One of these conditions are true:
-      * Token transfers are paused by governance
-      * Proposal succeeds and is in queue within the 24 hour execution delay before execution
-          * $ETHXR holder or their delegate voted no or did not cast a vote (casting an abstain vote will not allow you to rage quit)
-* **Benefits:** 
-  * Self determination of the protocol
-
-## Setup
-
+#### Install
 ```shell
 git submodule update --init --recursive
-mv .env.sample .env
-# set your variables in .env
 pnpm i
-forge build
+cp .env.sample .env
 ```
 
-## Test
+#### Setup environment
 ```shell
-forge test
+PRIVATE_KEY="ENTER YOUR PRIVATE KEY 0x..."
+CHAIN_ID=ENTER_CHAIN_ID
+RPC_URL="RPC URL https://..."
+ETHERSCAN_API_KEY=API_KEY_FROM_ETHERSCAN
+```
+#### Fund wallet
+Fund the wallet for the private key on the network you would like to deploy to.
+
+#### Edit `deployment.config.json`:
+JSON keys must be ordered alphabetically
+  ```json
+  {
+    "governor": {
+      "name": "Turnkey Governor", // name of the governor contract
+      "proposalThreshold": 1000000000000000000, // minimum number of tokens required to make a proposal in wei (10**18)
+      "quorumPercentage": 4, // minimum voting percentage of totalSupply required for a proposal to pass
+      "votingDelay": 7200, // minimum waiting time for a proposal to being voting (in seconds)
+      "voteExtension": 86400, // seconds to extend proposal if a late quorum arrives (in seconds)
+      "votingPeriod": 50400 // time period in which a voting proposal is active (in seconds)
+    },
+    "token": {
+      "name": "Turnkey", // token name
+      "owner": "0x0000000000000000000000000000000000000000", // owner of the token, can enable transfers
+      "symbol": "ABC" // token symbol
+    }
+  }
 ```
 
-## Coverage Report
-```shell
-pnpm report
+#### Test Deploy Contracts
 ```
-
-## Deploy Contracts
-
-**Test**
-```shell
 pnpm deploy:test
 ```
+If you are successful in this stage, move to the next step
 
-**Production**
-```shell
+#### Deploy Contracts
+```
 pnpm deploy:prod
 ```
 
-## Verify Contracts on Etherscan
-```shell
+#### Verify Contracts on Etherscan
+```
 pnpm verify
 ```
-
-Copyright 2025 EthStrategy Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

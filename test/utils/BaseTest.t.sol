@@ -2,10 +2,7 @@
 pragma solidity ^0.8.26;
 
 import {Test} from "forge-std/Test.sol";
-import {AtmAuction} from "../../src/AtmAuction.sol";
-import {EthStrategy} from "../../src/EthStrategy.sol";
-import {USDCToken} from "./USDCToken.sol";
-import {AccessManager} from "openzeppelin-contracts/contracts/access/manager/AccessManager.sol";
+import {TurnkeyGovernor} from "../../src/TurnkeyGovernor.sol";
 import {console} from "forge-std/console.sol";
 
 interface IERC20 {
@@ -14,9 +11,8 @@ interface IERC20 {
 }
 
 contract BaseTest is Test {
-    EthStrategy ethStrategy;
-    AccessManager accessManager;
-    USDCToken usdcToken;
+    TurnkeyGovernor turnkeyGovernor;
+    TurnkeyERC20 turnkeyERC20;
     Account initialOwner;
     Account admin1;
     Account admin2;
@@ -43,12 +39,10 @@ contract BaseTest is Test {
         vm.label(admin1.addr, "admin1");
         vm.label(admin2.addr, "admin2");
 
-        usdcToken = new USDCToken();
-
-        accessManager = new AccessManager(initialOwner.addr);
-        vm.prank(initialOwner.addr);
-        ethStrategy = new EthStrategy(
-            defaultTimelockDelay,
+        turnkeyERC20 = new TurnkeyERC20(initialOwner.addr, "ERC20", "ABC");
+        turnkeyGovernor = new TurnkeyGovernor(
+            "Governor",
+            turnkeyERC20,
             defaultQuorumPercentage,
             defaultVoteExtension,
             defaultVotingDelay,
@@ -68,36 +62,5 @@ contract BaseTest is Test {
         IERC20(_token).mint(_to, _amount);
         vm.prank(_to);
         IERC20(_token).approve(spender, _amount);
-    }
-
-    function calculateAmountIn(
-        uint128 _amountOut,
-        uint64 _startTime,
-        uint64 _duration,
-        uint128 _startPrice,
-        uint128 _endPrice,
-        uint64 _currentTime,
-        uint8 _decimals
-    ) public pure returns (uint256 amountIn) {
-        uint64 delta_t = _duration - (_currentTime - _startTime);
-        uint128 delta_p = _startPrice - _endPrice;
-        uint256 currentPrice = ((delta_p * delta_t) / _duration) + _endPrice;
-        amountIn = (_amountOut * currentPrice) / 10 ** _decimals;
-        return (amountIn == 0) ? 1 : amountIn;
-    }
-
-    function calculateAmountOut(
-        uint128 _amountIn,
-        uint64 _startTime,
-        uint64 _duration,
-        uint128 _startPrice,
-        uint128 _endPrice,
-        uint64 _currentTime,
-        uint8 _decimals
-    ) public pure returns (uint128) {
-        uint64 delta_t = _duration - (_currentTime - _startTime);
-        uint128 delta_p = _startPrice - _endPrice;
-        uint128 currentPrice = uint128(((delta_p * delta_t) / _duration) + _endPrice);
-        return uint128((_amountIn * 10 ** _decimals) / currentPrice);
     }
 }

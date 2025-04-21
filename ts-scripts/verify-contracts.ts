@@ -56,24 +56,11 @@ const verifyContract = async(
   const compilerVersion = await getCompilerVersion(contractName)
   let command = `forge verify-contract ${address} ${contractName} --compiler-version ${compilerVersion} --watch --verifier etherscan --etherscan-api-key ${process.env.ETHERSCAN_API_KEY} --chain-id ${process.env.CHAIN_ID} --rpc-url ${process.env.RPC_URL}`;
 
-  if (contractName === 'AtmAuction') {
-    command += ` --constructor-args $(cast abi-encode "constructor(address,address,address)" ${addressesMap.EthStrategy} ${config.lst} ${zeroAddress})`;
+  if (contractName === 'TurnkeyERC20') {
+    command += ` --constructor-args $(cast abi-encode "constructor(address,string,string)" ${config.owner} \"${config.name}\" \"${config.symbol}\" )`;
   }
-
-  if (contractName === 'BondAuction') {
-    command += ` --constructor-args $(cast abi-encode "constructor(address,address,address)" ${addressesMap.EthStrategy} ${config.usdc} ${zeroAddress})`;
-  }
-
-  if (contractName === 'EthStrategy') {
-    command += ` --constructor-args $(cast abi-encode "constructor(uint32,uint256,uint48,uint48,uint32,uint256)" ${config.timelockDelay} ${config.quorumPercentage} ${config.voteExtension} ${config.votingDelay} ${config.votingPeriod} ${config.proposalThreshold} )`;
-  }
-
-  if (contractName === 'Deposit') {
-    command += ` --constructor-args $(cast abi-encode "constructor(address,address,address,uint256)" ${addressesMap.EthStrategy} ${zeroAddress} ${config.DepositSigner} ${BigInt(config.DepositCap).toString()} )`;
-  }
-
-  if (contractName === 'NavOptions') {
-    command += ` --constructor-args $(cast abi-encode "constructor(address)" ${addressesMap.EthStrategy} )`;
+  if (contractName === 'TurnkeyGovernor') {
+    command += ` --constructor-args $(cast abi-encode "constructor(string,address,uint256,uint48,uint48,uint32,uint256)" \'${config.governorName}\' ${addressesMap.TurnkeyERC20} ${config.quorumPercentage} ${config.voteExtension} ${config.votingDelay} ${config.votingPeriod} ${config.proposalThreshold} )`;
   }
 
   exec(command, (err, stdout) => {
