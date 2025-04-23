@@ -1,5 +1,21 @@
 # Turnkey Governor
-Turnkey Governor is a repository used to simply deploy OpenZeppelin Governor and ERC-20 token with safe defaults.
+Turnkey Governor is a repository used to easily deploy OpenZeppelin Governor and ERC-20 token with safe defaults.
+
+## Overview
+This repository provides a streamlined way to deploy:
+- An ERC-20 token with governance capabilities (based on OpenZeppelin's ERC20Votes)
+- A Governor contract (based on OpenZeppelin's Governor with various extensions)
+
+The ERC-20 token includes:
+- Initial transfer pausing (can be enabled later)
+- Blacklisting capabilities
+- Support for delegation and voting
+
+The Governor contract includes:
+- Simple counting mechanism (one token = one vote)
+- Quorum fraction calculation
+- Configurable proposal threshold
+- Vote extension to prevent late quorum issues
 
 ## Requirements
 - git
@@ -9,59 +25,96 @@ Turnkey Governor is a repository used to simply deploy OpenZeppelin Governor and
 
 ## Deploy Guide
 
-#### Install
+### 1. Install Dependencies
 ```shell
 git submodule update --init --recursive
 pnpm i
 cp .env.sample .env
 ```
 
-#### Setup environment
-```shell
-PRIVATE_KEY="ENTER YOUR PRIVATE KEY 0x..."
-CHAIN_ID=ENTER_CHAIN_ID
-RPC_URL="RPC URL https://..."
-ETHERSCAN_API_KEY=API_KEY_FROM_ETHERSCAN
+### 2. Configure Environment
+Edit the `.env` file:
 ```
-#### Fund wallet
-Fund the wallet for the private key on the network you would like to deploy to.
+PRIVATE_KEY=YOUR_PRIVATE_KEY_HERE
+CHAIN_ID=CHAIN_ID_HERE
+RPC_URL=RPC_URL_HERE
+ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY_HERE
+```
 
-#### Edit `deployment.config.json`:
-JSON keys must be ordered alphabetically
-  ```json
-  {
-    "governor": {
-      "name": "Turnkey Governor", // name of the governor contract
-      "proposalThreshold": 1000000000000000000, // minimum number of tokens required to make a proposal in wei (10**18)
-      "quorumPercentage": 4, // minimum voting percentage of totalSupply required for a proposal to pass
-      "votingDelay": 7200, // minimum waiting time for a proposal to being voting (in seconds)
-      "voteExtension": 86400, // seconds to extend proposal if a late quorum arrives (in seconds)
-      "votingPeriod": 50400 // time period in which a voting proposal is active (in seconds)
-    },
-    "token": {
-      "name": "Turnkey", // token name
-      "owner": "0x0000000000000000000000000000000000000000", // owner of the token, can enable transfers
-      "symbol": "ABC" // token symbol
-    }
+### 3. Fund Wallet
+Fund the wallet associated with your private key on the network you plan to deploy to.
+
+### 4. Configure Deployment
+Edit the `deploy.config.json` file:
+```json
+{
+  "governor": {
+    "_initialProposalThreshold": 1000000000000000000, 
+    "_initialQuorumPercentage": 4, 
+    "_initialVoteExtension": 172800, 
+    "_initialVotingDelay": 86400, 
+    "_initialVotingPeriod": 604800, 
+    "_name": "Turnkey Governor"
+  },
+  "token": {
+    "_name": "Turnkey",
+    "_symbol": "ABC"
   }
+}
 ```
 
-#### Test Deploy Contracts
-```
+Configuration parameters:
+- `_initialProposalThreshold`: Minimum number of tokens required to make a proposal (in wei)
+- `_initialQuorumPercentage`: Minimum voting percentage of totalSupply required for a proposal to pass (0-100)
+- `_initialVoteExtension`: Seconds to extend proposal if a late quorum arrives
+- `_initialVotingDelay`: Time before a proposal can be voted on (in seconds)
+- `_initialVotingPeriod`: Duration a proposal is active for voting (in seconds)
+- `_name`: Name for the Governor contract and token
+- `_symbol`: Token symbol
+
+### 5. Test Deployment
+To verify your configuration works properly, run:
+```shell
 pnpm deploy:test
 ```
-If you are successful in this stage, move to the next step
 
-#### Deploy Contracts
+For additional debug information during deployment, add the `--debug` flag:
+```shell
+pnpm deploy:test --debug
 ```
+
+### 6. Production Deployment
+If the test deployment is successful, deploy to production:
+```shell
 pnpm deploy:prod
 ```
+This will deploy and automatically attempt to verify your contracts.
 
-#### Verify Contracts on Etherscan
+You can also enable debug mode for production deployment:
+```shell
+pnpm deploy:prod --debug
 ```
+
+### 7. Optional: Manual Contract Verification
+If verification fails during deployment, you can verify manually:
+```shell
 pnpm verify
 ```
 
+### 8. Transfer Control to Governance
+To transfer token administration to the governance contract:
+```shell
+pnpm renounce:test  # Test the transfer first
+pnpm renounce:prod  # Execute the actual transfer
+```
+
+The debug flag works with these commands as well:
+```shell
+pnpm renounce:test --debug
+pnpm renounce:prod --debug
+```
+
+## License
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

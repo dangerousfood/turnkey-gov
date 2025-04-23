@@ -4,25 +4,32 @@ pragma solidity ^0.8.26;
 import {Votes, VotesExtended} from "@openzeppelin/contracts/governance/utils/VotesExtended.sol";
 import {ERC20, ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
-import {Ownable} from "solady/src/auth/Ownable.sol";
+import {OwnableRoles} from "solady/src/auth/OwnableRoles.sol";
 
-contract TurnkeyERC20 is ERC20Votes, Ownable {
+/// @title TurnkeyERC20 is a simple ERC20 contract with a pauseable transfer function and blackisting
+contract TurnkeyERC20 is ERC20Votes, OwnableRoles {
     bool public isTransferPaused = true;
     /// @dev The error for when a transfer is attempted but transfers are paused (minting/burning is still allowed)
+
     error TransferPaused();
+    /// @dev The error for when a transfer is attempted but the address is blacklisted
+    error Blacklisted();
 
-    constructor(
-        address _owner,
-        string memory _name,
-        string memory _symbol
-    ) ERC20(_name, _symbol) EIP712(_name, "1") {
-        _initializeOwner(_owner);
+    /// @dev The role for the DEFAULT_ADMIN_ROLE, controls enabling transfers and adding/removing addresses from the blacklist
+    uint256 public constant DEFAULT_ADMIN_ROLE = uint256(keccak256("DEFAULT_ADMIN_ROLE"));
+    /// @dev The mapping of addresses to their blacklist status
+    mapping(address => bool) public blacklist;
+
+    constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) EIP712(_name, "1") {
+        _initializeOwner(msg.sender);
     }
 
-    function enableTransfer() external onlyOwner {
-      isTransferPaused = false;
+    /// @notice Enable transfers (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
+    function enableTransfer() external onlyRoles(DEFAULT_ADMIN_ROLE) {
+        isTransferPaused = false;
     }
 
+    /// @notice Mint tokens (restricted to owner)
     function mint(address _to, uint256 _amount) public onlyOwner {
         _mint(_to, _amount);
     }
@@ -37,6 +44,28 @@ contract TurnkeyERC20 is ERC20Votes, Ownable {
                 revert(0x1c, 0x04)
             }
         }
+
+        if (blacklist[from] || blacklist[to]) {
+            assembly {
+                mstore(0x00, 0x09550c77) // `Blacklisted()`.
+                revert(0x1c, 0x04)
+            }
+        }
         super._update(from, to, value);
+    }
+
+    /// @inheritdoc Votes
+    function CLOCK_MODE() public pure override returns (string memory) {
+        return "mode=timestamp";
+    }
+
+    /// @inheritdoc Votes
+    function clock() public view override returns (uint48) {
+        return uint48(block.timestamp);
+    }
+
+    /// @notice Add/remove an address to the blacklist (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
+    function toggleBlacklist(address _address) external onlyRoles(DEFAULT_ADMIN_ROLE) {
+        blacklist[_address] = !blacklist[_address];
     }
 }

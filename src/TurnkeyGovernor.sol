@@ -11,29 +11,28 @@ import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/Go
 import {GovernorPreventLateQuorum} from "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.sol";
 import {Votes, VotesExtended} from "@openzeppelin/contracts/governance/utils/VotesExtended.sol";
 import {ERC20, ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
-import {OwnableRoles} from "solady/src/auth/OwnableRoles.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
 
+/// @title TurnkeyGovernor is a boilerplate composition of the Governor contract set from OpenZeppelin
 contract TurnkeyGovernor is
     Governor,
     GovernorVotes,
     GovernorSettings,
     GovernorCountingSimple,
     GovernorVotesQuorumFraction,
-    GovernorPreventLateQuorum,
-    OwnableRoles
+    GovernorPreventLateQuorum
 {
     /// @notice The constructor for TurnkeyGovernor
-    /// @param _quorumPercentage The quorum percentage for the governor (0-100) the minimum percentage of votes required to reach quorum for a proposal to succeed
-    /// @param _voteExtension The vote extension for the governor when a late quorum is reached, the proposal will be queued for an additional _voteExtension seconds
+    /// @param _initialQuorumPercentage The quorum percentage for the governor (0-100) the minimum percentage of votes required to reach quorum for a proposal to succeed
+    /// @param _initialVoteExtension The vote extension for the governor when a late quorum is reached, the proposal will be queued for an additional _voteExtension seconds
     /// @param _initialVotingDelay The initial voting delay before a proposal is voted on (seconds)
     /// @param _initialVotingPeriod The initial voting period for a proposal (duration that voting occurs in seconds)
     /// @param _initialProposalThreshold The initial proposal threshold for the governor (minimum number of votes required to create a proposal in wei)
     constructor(
         string memory _name,
         IVotes _token,
-        uint256 _quorumPercentage,
-        uint48 _voteExtension,
+        uint256 _initialQuorumPercentage,
+        uint48 _initialVoteExtension,
         uint48 _initialVotingDelay,
         uint32 _initialVotingPeriod,
         uint256 _initialProposalThreshold
@@ -41,11 +40,9 @@ contract TurnkeyGovernor is
         Governor(_name)
         GovernorVotes(_token)
         GovernorSettings(_initialVotingDelay, _initialVotingPeriod, _initialProposalThreshold)
-        GovernorVotesQuorumFraction(_quorumPercentage)
-        GovernorPreventLateQuorum(_voteExtension)
-    {
-        _initializeOwner(msg.sender);
-    }
+        GovernorVotesQuorumFraction(_initialQuorumPercentage)
+        GovernorPreventLateQuorum(_initialVoteExtension)
+    {}
 
     /// @inheritdoc GovernorSettings
     function votingDelay() public view override(GovernorSettings, Governor) returns (uint256) {
@@ -68,7 +65,7 @@ contract TurnkeyGovernor is
     }
 
     /// @inheritdoc Governor
-    function CLOCK_MODE() public view virtual override(Governor, GovernorVotes) returns (string memory) {
+    function CLOCK_MODE() public pure virtual override(Governor, GovernorVotes) returns (string memory) {
         return "mode=timestamp";
     }
 

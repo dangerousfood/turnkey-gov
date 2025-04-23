@@ -3,6 +3,7 @@ pragma solidity ^0.8.26;
 
 import {Test} from "forge-std/Test.sol";
 import {TurnkeyGovernor} from "../../src/TurnkeyGovernor.sol";
+import {TurnkeyERC20} from "../../src/TurnkeyERC20.sol";
 import {console} from "forge-std/console.sol";
 
 interface IERC20 {
@@ -39,7 +40,8 @@ contract BaseTest is Test {
         vm.label(admin1.addr, "admin1");
         vm.label(admin2.addr, "admin2");
 
-        turnkeyERC20 = new TurnkeyERC20(initialOwner.addr, "ERC20", "ABC");
+        vm.prank(initialOwner.addr);
+        turnkeyERC20 = new TurnkeyERC20("ERC20", "ABC");
         turnkeyGovernor = new TurnkeyGovernor(
             "Governor",
             turnkeyERC20,
@@ -50,6 +52,10 @@ contract BaseTest is Test {
             defaultProposalThreshold
         );
 
+        vm.startPrank(initialOwner.addr);
+        turnkeyERC20.grantRoles(admin1.addr, turnkeyERC20.DEFAULT_ADMIN_ROLE());
+        vm.stopPrank();
+
         alice = address(1);
         vm.label(alice, "alice");
         bob = address(2);
@@ -59,6 +65,7 @@ contract BaseTest is Test {
     }
 
     function mintAndApprove(address _to, uint256 _amount, address spender, address _token) public {
+        vm.prank(initialOwner.addr);
         IERC20(_token).mint(_to, _amount);
         vm.prank(_to);
         IERC20(_token).approve(spender, _amount);

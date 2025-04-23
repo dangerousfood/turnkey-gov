@@ -1,15 +1,14 @@
 {
   "governor": {
-    "name": "Turnkey Governor",
-    "proposalThreshold": 1000000000000000000,
-    "quorumPercentage": 4,
-    "votingDelay": 7200,
-    "voteExtension": 86400,
-    "votingPeriod": 50400
+    "_initialProposalThreshold": 1000000000000000000,
+    "_initialQuorumPercentage": 4,
+    "_initialVoteExtension": 172800,
+    "_initialVotingDelay": 86400,
+    "_initialVotingPeriod": 604800,
+    "_name": "Turnkey Governor"
   },
   "token": {
-    "name": "Turnkey",
-    "owner": "0x0000000000000000000000000000000000000000",
-    "symbol": "ABC"
+    "_name": "Turnkey",
+    "_symbol": "ABC"
   }
 }

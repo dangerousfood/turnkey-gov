@@ -13,17 +13,17 @@ contract Deploy is Script {
     }
 
     struct TokenConfig {
-        string name;
-        address owner;
-        string symbol;
+        string _name;
+        string _symbol;
     }
+
     struct GovernorConfig {
-        string name;
-        uint256 proposalThreshold;
-        uint256 quorumPercentage;
-        uint256 votingDelay;
-        uint256 voteExtension;
-        uint256 votingPeriod;
+        uint256 _initialProposalThreshold;
+        uint256 _initialQuorumPercentage;
+        uint256 _initialVoteExtension;
+        uint256 _initialVotingDelay;
+        uint256 _initialVotingPeriod;
+        string _name;
     }
 
     function run() public {
@@ -33,54 +33,66 @@ contract Deploy is Script {
         bytes memory data = vm.parseJson(json);
         Config memory config = abi.decode(data, (Config));
 
-        console2.log("owner: ", config.token.owner);
-        console2.log("name: ", config.token.name);
-        console2.log("symbol: ", config.token.symbol);
-        console2.log("governor name: ", config.governor.name);
-        console2.log("proposalThreshold: ", config.governor.proposalThreshold);
-        console2.log("quorumPercentage: ", config.governor.quorumPercentage);
-        console2.log("votingDelay: ", config.governor.votingDelay);
-        console2.log("votingPeriod: ", config.governor.votingPeriod);
-        console2.log("voteExtension: ", config.governor.voteExtension);
+        // Check if DEBUG environment variable is set
+        bool isDebugMode = vm.envOr("DEBUG", false);
+
+        if (isDebugMode) {
+            console2.log("DEBUG MODE ENABLED");
+            console2.log("name: ", config.token._name);
+            console2.log("symbol: ", config.token._symbol);
+            console2.log("governor name: ", config.governor._name);
+            console2.log("proposalThreshold: ", config.governor._initialProposalThreshold);
+            console2.log("quorumPercentage: ", config.governor._initialQuorumPercentage);
+            console2.log("votingDelay: ", config.governor._initialVotingDelay);
+            console2.log("votingPeriod: ", config.governor._initialVotingPeriod);
+            console2.log("voteExtension: ", config.governor._initialVoteExtension);
+        }
+
         vm.startBroadcast(vm.envUint("PRIVATE_KEY"));
         address deployer = vm.addr(vm.envUint("PRIVATE_KEY"));
         console2.log("deployer: ", deployer);
 
-        TurnkeyERC20 turnkeyERC20 = new TurnkeyERC20(
-            config.token.owner,
-            config.token.name,
-            config.token.symbol
-        );
+        TurnkeyERC20 turnkeyERC20 = new TurnkeyERC20(config.token._name, config.token._symbol);
         TurnkeyGovernor turnkeyGovernor = new TurnkeyGovernor(
-            config.governor.name,
+            config.governor._name,
             turnkeyERC20,
-            config.governor.quorumPercentage,
-            uint48(config.governor.voteExtension),
-            uint48(config.governor.votingDelay),
-            uint32(config.governor.votingPeriod),
-            config.governor.proposalThreshold
+            config.governor._initialQuorumPercentage,
+            uint48(config.governor._initialVoteExtension),
+            uint48(config.governor._initialVotingDelay),
+            uint32(config.governor._initialVotingPeriod),
+            config.governor._initialProposalThreshold
         );
         vm.stopBroadcast();
 
         string memory deployments = "deployments";
+        string memory turnkeyERC20Json = "token";
+        string memory turnkeyGovernorJson = "governor";
 
-        vm.serializeAddress(deployments, "TurnkeyGovernor", address(turnkeyGovernor));
-        string memory deploymentsJson = vm.serializeAddress(deployments, "TurnkeyERC20", address(turnkeyERC20));
+        vm.serializeAddress(turnkeyERC20Json, "_address", address(turnkeyERC20));
+        vm.serializeString(turnkeyERC20Json, "_name", config.token._name);
+        vm.serializeString(turnkeyERC20Json, "_symbol", config.token._symbol);
 
-        string memory deployedConfig = "config";
-        vm.serializeAddress(deployedConfig, "deployer", deployer);
-        vm.serializeAddress(deployedConfig, "owner", config.token.owner);
-        vm.serializeString(deployedConfig, "name", config.token.name);
-        vm.serializeString(deployedConfig, "symbol", config.token.symbol);
-        vm.serializeString(deployedConfig, "governorName", config.governor.name);
-        vm.serializeUint(deployedConfig, "proposalThreshold", config.governor.proposalThreshold);
-        vm.serializeUint(deployedConfig, "quorumPercentage", config.governor.quorumPercentage);
-        vm.serializeUint(deployedConfig, "votingDelay", config.governor.votingDelay);
-        vm.serializeUint(deployedConfig, "votingPeriod", config.governor.votingPeriod);
-        vm.serializeUint(deployedConfig, "voteExtension", config.governor.voteExtension);
-        string memory deployedConfigJson = vm.serializeUint(deployedConfig, "startBlock", block.number);
+        vm.serializeAddress(turnkeyGovernorJson, "_address", address(turnkeyGovernor));
+        vm.serializeUint(turnkeyGovernorJson, "_initialProposalThreshold", config.governor._initialProposalThreshold);
+        vm.serializeUint(turnkeyGovernorJson, "_initialQuorumPercentage", config.governor._initialQuorumPercentage);
+        vm.serializeUint(turnkeyGovernorJson, "_initialVotingDelay", config.governor._initialVotingDelay);
+        vm.serializeUint(turnkeyGovernorJson, "_initialVotingPeriod", config.governor._initialVotingPeriod);
+        vm.serializeUint(turnkeyGovernorJson, "_initialVoteExtension", config.governor._initialVoteExtension);
+        vm.serializeString(turnkeyGovernorJson, "_name", config.governor._name);
+        vm.serializeAddress(turnkeyGovernorJson, "_token", address(turnkeyERC20));
 
-        vm.writeJson(deploymentsJson, "./out/deployments.json");
-        vm.writeJson(deployedConfigJson, "./out/deployed.config.json");
+        vm.serializeString(
+            deployments, "token", vm.serializeAddress(turnkeyERC20Json, "_address", address(turnkeyERC20))
+        );
+        string memory deploymentsJson = vm.serializeString(
+            deployments, "governor", vm.serializeAddress(turnkeyGovernorJson, "_token", address(turnkeyERC20))
+        );
+
+        string memory metadataJson = "metadata";
+        vm.serializeAddress(metadataJson, "deployer", deployer);
+        vm.writeJson(
+            vm.serializeString(deployments, "metadata", vm.serializeUint(metadataJson, "startBlock", block.number)),
+            "./out/deployed.config.json"
+        );
     }
 }
