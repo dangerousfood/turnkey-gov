@@ -11,10 +11,14 @@
     "verify": "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/verify-contracts.ts --chainId $CHAIN_ID --etherscan $ETHERSCAN_API_KEY --rpcUrl $RPC_URL'",
     "report": "forge coverage --no-match-test testFuzz --report lcov && genhtml -o report --branch-coverage lcov.info && rm lcov.info",
     "renounce:test": "ts-node ts-scripts/run-with-debug.ts renounce-test",
-    "renounce:prod": "ts-node ts-scripts/run-with-debug.ts renounce-prod"
+    "renounce:prod": "ts-node ts-scripts/run-with-debug.ts renounce-prod",
+    "publish-tally": "ts-node ts-scripts/run-with-debug.ts publish-tally",
+    "check-tally-dao": "ts-node ts-scripts/run-with-debug.ts check-tally-dao"
   },
   "dependencies": {
     "@types/node": "^20.11.0",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
     "dotenv-cli": "^8.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

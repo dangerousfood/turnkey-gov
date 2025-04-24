@@ -31,6 +31,14 @@ const COMMANDS: CommandMap = {
   'renounce-prod': {
     normal: "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/RenounceToGovernance.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --broadcast --slow'",
     debug: "DEBUG=true dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/RenounceToGovernance.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --broadcast --slow'"
+  },
+  'publish-tally': {
+    normal: "dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/publish-tally.ts",
+    debug: "DEBUG=true dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/publish-tally.ts"
+  },
+  'check-tally-dao': {
+    normal: "dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/check-tally-dao.ts",
+    debug: "DEBUG=true dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/check-tally-dao.ts"
   }
 };
 
