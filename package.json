@@ -12,7 +12,7 @@
     "report": "forge coverage --no-match-test testFuzz --report lcov && genhtml -o report --branch-coverage lcov.info && rm lcov.info",
     "renounce:test": "ts-node ts-scripts/run-with-debug.ts renounce-test",
     "renounce:prod": "ts-node ts-scripts/run-with-debug.ts renounce-prod",
-    "publish-tally": "ts-node ts-scripts/run-with-debug.ts publish-tally",
+    "publish:tally": "ts-node ts-scripts/run-with-debug.ts publish-tally",
     "check-tally-dao": "ts-node ts-scripts/run-with-debug.ts check-tally-dao"
   },
   "dependencies": {

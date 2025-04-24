@@ -44,7 +44,7 @@ Edit the `.env` file:
 PRIVATE_KEY=YOUR_PRIVATE_KEY_HERE
 CHAIN_ID=CHAIN_ID_HERE
 RPC_URL=RPC_URL_HERE
-ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY_HERE
+ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
 ```
 
 ### 3. Fund Wallet
@@ -118,6 +118,65 @@ The debug flag works with these commands as well:
 ```shell
 pnpm renounce:test --debug
 pnpm renounce:prod --debug
+```
+
+### 9. Publishing Your DAO to Tally.xyz
+
+Turnkey Governor includes functionality to publish your DAO to [Tally.xyz](https://www.tally.xyz/), a popular governance platform for DAOs.
+
+#### Prerequisites
+
+1. You must have already deployed your Turnkey Governor and Token contracts
+2. You need to obtain a Tally API token and API key from your Tally.xyz account
+
+#### Environment Setup
+
+Update your `.env` file with the following Tally-specific variables:
+```
+TALLY_API_TOKEN=YOUR_TALLY_BEARER_TOKEN
+TALLY_API_KEY=YOUR_TALLY_API_KEY
+```
+
+#### Tally Configuration (Optional)
+
+You can customize how your DAO appears on Tally.xyz by creating a `tally.config.json` file in the project root:
+
+```json
+{
+  "daoName": "Your DAO Name",
+  "description": "A detailed description of your DAO and its purpose."
+}
+```
+
+A sample file `tally.config.sample.json` is provided that you can copy and customize:
+```shell
+cp tally.config.sample.json tally.config.json
+```
+
+If this file is not present, the script will use information from your `deploy.config.json` file instead.
+
+#### Check DAO Status
+To check if your DAO is already registered on Tally:
+```shell
+pnpm check-tally-dao
+```
+
+#### Publish to Tally
+To publish your DAO to Tally.xyz:
+```shell
+pnpm publish:tally
+```
+
+The script will:
+1. Extract your contract addresses from deployment artifacts
+2. Get DAO configuration from your `tally.config.json` or fall back to `deploy.config.json`
+3. Format and submit the data to Tally
+4. Return a URL to access your new DAO on Tally
+
+You can use the debug flag for more detailed output:
+```shell
+pnpm publish:tally --debug
+pnpm check-tally-dao --debug
 ```
 
 ## License
