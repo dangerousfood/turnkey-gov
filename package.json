@@ -4,6 +4,7 @@
   "description": "Turnkey Governor is a repository used to easily deploy OpenZeppelin Governor and ERC-20 token with safe defaults",
   "main": "index.js",
   "scripts": {
+    "env-setup": "ts-node ts-scripts/setup.ts",
     "validate-env": "dotenv -e .env -- ts-node ts-scripts/validate-env.ts",
     "deploy:test": "ts-node ts-scripts/run-with-debug.ts deploy-test",
     "deploy:prod": "ts-node ts-scripts/run-with-debug.ts deploy-prod",

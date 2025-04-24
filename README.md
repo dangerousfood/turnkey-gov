@@ -26,6 +26,12 @@ The Governor contract includes:
 ## Deploy Guide
 
 ### 1. Install Dependencies
+You can use the automated setup script which will check for required dependencies and perform the installation steps:
+```shell
+pnpm env-setup
+```
+
+Or manually:
 ```shell
 git submodule update --init --recursive
 pnpm i
