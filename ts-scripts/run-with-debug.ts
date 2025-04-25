@@ -16,27 +16,27 @@ type CommandMap = {
 
 // Map of command arguments to actual command implementations
 const COMMANDS: CommandMap = {
-  'deploy-test': {
+  'deploy:test': {
     normal: "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/Deploy.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\"'",
     debug: "DEBUG=true dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/Deploy.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\"'"
   },
-  'deploy-prod': {
+  'deploy:prod': {
     normal: "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/Deploy.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --broadcast --slow' && pnpm verify",
     debug: "DEBUG=true dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/Deploy.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --broadcast --slow' && pnpm verify"
   },
-  'renounce-test': {
+  'renounce:test': {
     normal: "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/RenounceToGovernance.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --slow'",
     debug: "DEBUG=true dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/RenounceToGovernance.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --slow'"
   },
-  'renounce-prod': {
+  'renounce:prod': {
     normal: "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/RenounceToGovernance.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --broadcast --slow'",
     debug: "DEBUG=true dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge script script/RenounceToGovernance.s.sol --chain-id \"$CHAIN_ID\" --rpc-url \"$RPC_URL\" --private-key \"$PRIVATE_KEY\" --broadcast --slow'"
   },
-  'publish-tally': {
+  'publish:tally': {
     normal: "dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/publish-tally.ts",
     debug: "DEBUG=true dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/publish-tally.ts"
   },
-  'check-tally-dao': {
+  'check:tally': {
     normal: "dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/check-tally-dao.ts",
     debug: "DEBUG=true dotenv -e .env -- ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/check-tally-dao.ts"
   }

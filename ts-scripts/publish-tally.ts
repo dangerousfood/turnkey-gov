@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
 import dotenv from 'dotenv';
+import { getTallyApiToken } from './tally-auth';
 
 // Load environment variables
 dotenv.config();
@@ -183,11 +184,8 @@ async function checkDaoOnTally(governorAddress: string, chainId: string) {
     // Construct the API request
     const tallyApiUrl = 'https://api.tally.xyz/query';
     
-    // The API requires a personal access token for authentication
-    const token = process.env.TALLY_API_TOKEN;
-    if (!token) {
-      throw new Error('TALLY_API_TOKEN environment variable is not set. Please add it to your .env file.');
-    }
+    // Get the token using SIWE authentication
+    const token = await getTallyApiToken();
     
     // API key is also required
     const apiKey = process.env.TALLY_API_KEY;
@@ -357,17 +355,17 @@ async function checkDaoOnTally(governorAddress: string, chainId: string) {
 async function doesGovernorExist(governorAddress: string, chainId: string) {
   try {
     if (DEBUG) {
-      console.log('Doing direct check if governor exists on Tally...');
+      console.log('Checking if governor exists on Tally...');
     }
     
     // Construct the namespace based on the chain ID
     const namespace = `eip155:${chainId}`;
     
-    // The API requires a personal access token for authentication
-    const token = process.env.TALLY_API_TOKEN;
-    if (!token) {
-      throw new Error('TALLY_API_TOKEN environment variable is not set. Please add it to your .env file.');
-    }
+    // Construct the API request
+    const tallyApiUrl = 'https://api.tally.xyz/query';
+    
+    // Get the token using SIWE authentication
+    const token = await getTallyApiToken();
     
     // API key is also required
     const apiKey = process.env.TALLY_API_KEY;
@@ -405,7 +403,7 @@ async function doesGovernorExist(governorAddress: string, chainId: string) {
     
     try {
       const response = await axios.post(
-        'https://api.tally.xyz/query',
+        tallyApiUrl,
         {
           query: testMutation,
           variables: testVariables
@@ -513,11 +511,8 @@ async function publishToTally() {
     // Construct the API request
     const tallyApiUrl = 'https://api.tally.xyz/query';
     
-    // The API requires a personal access token for authentication
-    const token = process.env.TALLY_API_TOKEN;
-    if (!token) {
-      throw new Error('TALLY_API_TOKEN environment variable is not set. Please add it to your .env file.');
-    }
+    // Get the token using SIWE authentication
+    const token = await getTallyApiToken();
     
     // API key is also required
     const apiKey = process.env.TALLY_API_KEY;

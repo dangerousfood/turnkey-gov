@@ -13,7 +13,7 @@ To obtain your Tally API credentials:
 
 1. Create an account on [Tally.xyz](https://www.tally.xyz/)
 2. Once logged in, you can find your API key in your account settings
-3. The Bearer token is associated with your login session
+3. The Bearer token is now automatically generated using Sign-In With Ethereum (SIWE) with your private key
 
 ## Environment Variables
 
@@ -21,7 +21,7 @@ Make sure the following environment variables are set in your `.env` file:
 
 ```
 CHAIN_ID=         # The chain ID where your contracts are deployed
-TALLY_API_TOKEN=  # Your Tally.xyz Bearer token
+PRIVATE_KEY=      # Your Ethereum private key for SIWE authentication
 TALLY_API_KEY=    # Your Tally.xyz API key
 ```
 

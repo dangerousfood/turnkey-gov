@@ -4,16 +4,16 @@
   "description": "Ungovernable Governor is a repository used to easily deploy OpenZeppelin Governor and ERC-20 token with safe defaults",
   "main": "index.js",
   "scripts": {
-    "env-setup": "ts-node ts-scripts/setup.ts",
-    "validate-env": "dotenv -e .env -- ts-node ts-scripts/validate-env.ts",
-    "deploy:test": "ts-node ts-scripts/run-with-debug.ts deploy-test",
-    "deploy:prod": "ts-node ts-scripts/run-with-debug.ts deploy-prod",
+    "setup:env": "ts-node ts-scripts/setup.ts",
+    "validate:env": "dotenv -e .env -- ts-node ts-scripts/validate-env.ts",
+    "deploy:test": "ts-node ts-scripts/run-with-debug.ts deploy:test",
+    "deploy:prod": "ts-node ts-scripts/run-with-debug.ts deploy:prod",
     "verify": "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/verify-contracts.ts --chainId $CHAIN_ID --etherscan $ETHERSCAN_API_KEY --rpcUrl $RPC_URL'",
     "report": "forge coverage --no-match-test testFuzz --report lcov && genhtml -o report --branch-coverage lcov.info && rm lcov.info",
-    "renounce:test": "ts-node ts-scripts/run-with-debug.ts renounce-test",
-    "renounce:prod": "ts-node ts-scripts/run-with-debug.ts renounce-prod",
-    "publish:tally": "ts-node ts-scripts/run-with-debug.ts publish-tally",
-    "check-tally-dao": "ts-node ts-scripts/run-with-debug.ts check-tally-dao"
+    "renounce:test": "ts-node ts-scripts/run-with-debug.ts renounce:test",
+    "renounce:prod": "ts-node ts-scripts/run-with-debug.ts renounce:prod",
+    "publish:tally": "ts-node ts-scripts/run-with-debug.ts publish:tally",
+    "check:tally": "ts-node ts-scripts/run-with-debug.ts check:tally"
   },
   "dependencies": {
     "@types/node": "^20.11.0",

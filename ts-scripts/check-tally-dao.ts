@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
 import dotenv from 'dotenv';
+import { getTallyApiToken } from './tally-auth';
 
 // Load environment variables
 dotenv.config();
@@ -91,11 +92,8 @@ async function checkDaoOnTally() {
     // Construct the API request
     const tallyApiUrl = 'https://api.tally.xyz/query';
     
-    // The API requires a personal access token for authentication
-    const token = process.env.TALLY_API_TOKEN;
-    if (!token) {
-      throw new Error('TALLY_API_TOKEN environment variable is not set. Please add it to your .env file.');
-    }
+    // Get the token using SIWE authentication
+    const token = await getTallyApiToken();
     
     // API key is also required
     const apiKey = process.env.TALLY_API_KEY;
@@ -156,7 +154,7 @@ async function checkDaoOnTally() {
         // Check if the error indicates that the governor doesn't exist
         const errorsStr = JSON.stringify(response.data.errors);
         if (errorsStr.includes('not found')) {
-          console.log('❌ DAO not found on Tally. You can register it using the publish-tally script.');
+          console.log('❌ DAO not found on Tally. You can register it using the publish:tally script.');
           return null;
         }
         
@@ -177,14 +175,14 @@ async function checkDaoOnTally() {
           console.log('Warning: Governor exists but is not associated with an organization');
         }
       } else {
-        console.log('❌ DAO not found on Tally. You can register it using the publish-tally script.');
+        console.log('❌ DAO not found on Tally. You can register it using the publish:tally script.');
       }
       
       return result;
     } catch (error: any) {
       if (error.response && error.response.status === 422) {
         // Handle 422 errors more gracefully
-        console.log('❌ DAO not found on Tally. You can register it using the publish-tally script.');
+        console.log('❌ DAO not found on Tally. You can register it using the publish:tally script.');
         if (DEBUG) {
           console.log('Debug: Received 422 status code from Tally API, which likely means the DAO does not exist');
           if (error.response.data) {

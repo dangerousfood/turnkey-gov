@@ -28,7 +28,7 @@ The Governor contract includes:
 ### 1. Install Dependencies
 You can use the automated setup script which will check for required dependencies and perform the installation steps:
 ```shell
-pnpm env-setup
+pnpm setup:env
 ```
 
 Or manually:
@@ -128,14 +128,16 @@ Ungovernable Governor includes functionality to publish your DAO to [Tally.xyz](
 
 1. You must have already deployed your Ungovernable Governor and Token contracts
 2. You need to obtain a Tally API token and API key from your Tally.xyz account
+3. Follow this guide on obtaining a [Tally API key](https://docs.tally.xyz/tally-features/welcome#how-to-use-the-tally-api)
 
 #### Environment Setup
 
 Update your `.env` file with the following Tally-specific variables:
 ```
-TALLY_API_TOKEN=YOUR_TALLY_BEARER_TOKEN
 TALLY_API_KEY=YOUR_TALLY_API_KEY
 ```
+
+The `TALLY_API_TOKEN` is now automatically generated using Sign-In With Ethereum (SIWE) with your private key. You don't need to manually obtain it anymore.
 
 #### Tally Configuration (Optional)
 
@@ -158,7 +160,7 @@ If this file is not present, the script will use information from your `deploy.c
 #### Check DAO Status
 To check if your DAO is already registered on Tally:
 ```shell
-pnpm check-tally-dao
+pnpm check:tally
 ```
 
 #### Publish to Tally
@@ -176,7 +178,7 @@ The script will:
 You can use the debug flag for more detailed output:
 ```shell
 pnpm publish:tally --debug
-pnpm check-tally-dao --debug
+pnpm check:tally --debug
 ```
 
 ## License
