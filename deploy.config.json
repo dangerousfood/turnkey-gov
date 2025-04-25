@@ -5,10 +5,10 @@
     "_initialVoteExtension": 172800,
     "_initialVotingDelay": 86400,
     "_initialVotingPeriod": 604800,
-    "_name": "Turnkey Governor"
+    "_name": "Ungovernable Governor"
   },
   "token": {
-    "_name": "Turnkey",
+    "_name": "Ungovernable",
     "_symbol": "ABC"
   }
 }

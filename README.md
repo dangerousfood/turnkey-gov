@@ -1,5 +1,5 @@
-# Turnkey Governor
-Turnkey Governor is a repository used to easily deploy OpenZeppelin Governor and ERC-20 token with safe defaults.
+# Ungovernable Governor
+Ungovernable Governor is a repository used to easily deploy OpenZeppelin Governor and ERC-20 token with safe defaults.
 
 ## Overview
 This repository provides a streamlined way to deploy:
@@ -60,10 +60,10 @@ Edit the `deploy.config.json` file:
     "_initialVoteExtension": 172800, 
     "_initialVotingDelay": 86400, 
     "_initialVotingPeriod": 604800, 
-    "_name": "Turnkey Governor"
+    "_name": "Ungovernable Governor"
   },
   "token": {
-    "_name": "Turnkey",
+    "_name": "Ungovernable",
     "_symbol": "ABC"
   }
 }
@@ -122,11 +122,11 @@ pnpm renounce:prod --debug
 
 ### 9. Publishing Your DAO to Tally.xyz
 
-Turnkey Governor includes functionality to publish your DAO to [Tally.xyz](https://www.tally.xyz/), a popular governance platform for DAOs.
+Ungovernable Governor includes functionality to publish your DAO to [Tally.xyz](https://www.tally.xyz/), a popular governance platform for DAOs.
 
 #### Prerequisites
 
-1. You must have already deployed your Turnkey Governor and Token contracts
+1. You must have already deployed your Ungovernable Governor and Token contracts
 2. You need to obtain a Tally API token and API key from your Tally.xyz account
 
 #### Environment Setup

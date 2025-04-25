@@ -1,7 +1,7 @@
 {
-  "name": "turnkey-governor",
+  "name": "ungovernable-governor",
   "version": "2.0.0",
-  "description": "Turnkey Governor is a repository used to easily deploy OpenZeppelin Governor and ERC-20 token with safe defaults",
+  "description": "Ungovernable Governor is a repository used to easily deploy OpenZeppelin Governor and ERC-20 token with safe defaults",
   "main": "index.js",
   "scripts": {
     "env-setup": "ts-node ts-scripts/setup.ts",

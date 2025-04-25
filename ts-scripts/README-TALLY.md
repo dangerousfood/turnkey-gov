@@ -4,7 +4,7 @@ This document explains how to use the `publish-tally` script to register your DA
 
 ## Prerequisites
 
-1. You must have already deployed your Turnkey Governor and Token contracts.
+1. You must have already deployed your Ungovernable Governor and Token contracts.
 2. You need to obtain a Tally API token and API key.
 
 ## Obtaining Tally API Credentials

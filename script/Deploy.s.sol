@@ -3,8 +3,8 @@ pragma solidity ^0.8.26;
 
 import {console2} from "forge-std/console2.sol";
 import {Script} from "forge-std/Script.sol";
-import {TurnkeyERC20} from "../src/TurnkeyERC20.sol";
-import {TurnkeyGovernor} from "../src/TurnkeyGovernor.sol";
+import {UngovernableERC20} from "../src/UngovernableERC20.sol";
+import {UngovernableGovernor} from "../src/UngovernableGovernor.sol";
 
 contract Deploy is Script {
     struct Config {
@@ -52,10 +52,10 @@ contract Deploy is Script {
         address deployer = vm.addr(vm.envUint("PRIVATE_KEY"));
         console2.log("deployer: ", deployer);
 
-        TurnkeyERC20 turnkeyERC20 = new TurnkeyERC20(config.token._name, config.token._symbol);
-        TurnkeyGovernor turnkeyGovernor = new TurnkeyGovernor(
+        UngovernableERC20 ungovernableERC20 = new UngovernableERC20(config.token._name, config.token._symbol);
+        UngovernableGovernor ungovernableGovernor = new UngovernableGovernor(
             config.governor._name,
-            turnkeyERC20,
+            ungovernableERC20,
             config.governor._initialQuorumPercentage,
             uint48(config.governor._initialVoteExtension),
             uint48(config.governor._initialVotingDelay),
@@ -65,27 +65,27 @@ contract Deploy is Script {
         vm.stopBroadcast();
 
         string memory deployments = "deployments";
-        string memory turnkeyERC20Json = "token";
-        string memory turnkeyGovernorJson = "governor";
+        string memory ungovernableERC20Json = "token";
+        string memory ungovernableGovernorJson = "governor";
 
-        vm.serializeAddress(turnkeyERC20Json, "_address", address(turnkeyERC20));
-        vm.serializeString(turnkeyERC20Json, "_name", config.token._name);
-        vm.serializeString(turnkeyERC20Json, "_symbol", config.token._symbol);
+        vm.serializeAddress(ungovernableERC20Json, "_address", address(ungovernableERC20));
+        vm.serializeString(ungovernableERC20Json, "_name", config.token._name);
+        vm.serializeString(ungovernableERC20Json, "_symbol", config.token._symbol);
 
-        vm.serializeAddress(turnkeyGovernorJson, "_address", address(turnkeyGovernor));
-        vm.serializeUint(turnkeyGovernorJson, "_initialProposalThreshold", config.governor._initialProposalThreshold);
-        vm.serializeUint(turnkeyGovernorJson, "_initialQuorumPercentage", config.governor._initialQuorumPercentage);
-        vm.serializeUint(turnkeyGovernorJson, "_initialVotingDelay", config.governor._initialVotingDelay);
-        vm.serializeUint(turnkeyGovernorJson, "_initialVotingPeriod", config.governor._initialVotingPeriod);
-        vm.serializeUint(turnkeyGovernorJson, "_initialVoteExtension", config.governor._initialVoteExtension);
-        vm.serializeString(turnkeyGovernorJson, "_name", config.governor._name);
-        vm.serializeAddress(turnkeyGovernorJson, "_token", address(turnkeyERC20));
+        vm.serializeAddress(ungovernableGovernorJson, "_address", address(ungovernableGovernor));
+        vm.serializeUint(ungovernableGovernorJson, "_initialProposalThreshold", config.governor._initialProposalThreshold);
+        vm.serializeUint(ungovernableGovernorJson, "_initialQuorumPercentage", config.governor._initialQuorumPercentage);
+        vm.serializeUint(ungovernableGovernorJson, "_initialVotingDelay", config.governor._initialVotingDelay);
+        vm.serializeUint(ungovernableGovernorJson, "_initialVotingPeriod", config.governor._initialVotingPeriod);
+        vm.serializeUint(ungovernableGovernorJson, "_initialVoteExtension", config.governor._initialVoteExtension);
+        vm.serializeString(ungovernableGovernorJson, "_name", config.governor._name);
+        vm.serializeAddress(ungovernableGovernorJson, "_token", address(ungovernableERC20));
 
         vm.serializeString(
-            deployments, "token", vm.serializeAddress(turnkeyERC20Json, "_address", address(turnkeyERC20))
+            deployments, "token", vm.serializeAddress(ungovernableERC20Json, "_address", address(ungovernableERC20))
         );
         string memory deploymentsJson = vm.serializeString(
-            deployments, "governor", vm.serializeAddress(turnkeyGovernorJson, "_token", address(turnkeyERC20))
+            deployments, "governor", vm.serializeAddress(ungovernableGovernorJson, "_token", address(ungovernableERC20))
         );
 
         string memory metadataJson = "metadata";

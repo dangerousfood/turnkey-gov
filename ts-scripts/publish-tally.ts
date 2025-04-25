@@ -52,11 +52,11 @@ async function getContractAddresses() {
     let tokenDeployedAtBlock: number | null = null;
     
     for (const tx of transactions) {
-      if (tx.contractName === 'TurnkeyGovernor' && tx.transactionType === 'CREATE') {
+      if (tx.contractName === 'UngovernableGovernor' && tx.transactionType === 'CREATE') {
         governorAddress = tx.contractAddress;
         governorDeployedAtBlock = tx.blockNumber;
       }
-      if ((tx.contractName === 'TurnkeyERC20' || tx.contractName === 'TurnkeyToken') && tx.transactionType === 'CREATE') {
+      if ((tx.contractName === 'UngovernableERC20' || tx.contractName === 'UngovernableToken') && tx.transactionType === 'CREATE') {
         tokenAddress = tx.contractAddress;
         tokenDeployedAtBlock = tx.blockNumber;
       }
@@ -115,8 +115,8 @@ async function getDaoConfig() {
       const tallyConfig = JSON.parse(fs.readFileSync(tallyConfigPath, 'utf8'));
       
       // Extract the name and description directly from tally.config.json
-      const name = tallyConfig.daoName || 'Turnkey DAO';
-      const description = tallyConfig.description || 'A DAO created with Turnkey Governor.';
+      const name = tallyConfig.daoName || 'Ungovernable DAO';
+      const description = tallyConfig.description || 'A DAO created with Ungovernable Governor.';
       
       if (DEBUG) {
         console.log('Using DAO name from tally.config.json:', name);
@@ -144,14 +144,14 @@ async function getDaoConfig() {
       ? config.governor._name 
       : (config.token && config.token._name 
         ? `${config.token._name} DAO` 
-        : 'Turnkey DAO');
+        : 'Ungovernable DAO');
     
     // Create a description based on the token info if available
     const tokenInfo = config.token 
       ? `Token: ${config.token._name || 'Unknown'} (${config.token._symbol || 'Unknown'})`
       : '';
     
-    const description = `A DAO created with Turnkey Governor. ${tokenInfo}`.trim();
+    const description = `A DAO created with Ungovernable Governor. ${tokenInfo}`.trim();
     
     if (DEBUG) {
       console.log('Using DAO name from deploy.config.json:', governorName);

@@ -49,7 +49,7 @@ async function getContractAddresses() {
     let governorAddress: string | null = null;
     
     for (const tx of transactions) {
-      if (tx.contractName === 'TurnkeyGovernor' && tx.transactionType === 'CREATE') {
+      if (tx.contractName === 'UngovernableGovernor' && tx.transactionType === 'CREATE') {
         governorAddress = tx.contractAddress;
       }
     }

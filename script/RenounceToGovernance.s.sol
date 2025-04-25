@@ -3,8 +3,8 @@ pragma solidity ^0.8.26;
 
 import {console2} from "forge-std/console2.sol";
 import {Script} from "forge-std/Script.sol";
-import {TurnkeyERC20} from "../src/TurnkeyERC20.sol";
-import {TurnkeyGovernor} from "../src/TurnkeyGovernor.sol";
+import {UngovernableERC20} from "../src/UngovernableERC20.sol";
+import {UngovernableGovernor} from "../src/UngovernableGovernor.sol";
 
 contract RenounceToGovernance is Script {
     struct Config {
@@ -61,12 +61,12 @@ contract RenounceToGovernance is Script {
             console2.log("Using governor address:", config.governor._address);
         }
 
-        TurnkeyERC20 turnkeyERC20 = TurnkeyERC20(config.token._address);
-        TurnkeyGovernor turnkeyGovernor = TurnkeyGovernor(payable(config.governor._address));
+        UngovernableERC20 ungovernableERC20 = UngovernableERC20(config.token._address);
+        UngovernableGovernor ungovernableGovernor = UngovernableGovernor(payable(config.governor._address));
 
         vm.startBroadcast();
-        turnkeyERC20.grantRoles(address(turnkeyGovernor), turnkeyERC20.DEFAULT_ADMIN_ROLE());
-        turnkeyERC20.renounceOwnership();
+        ungovernableERC20.grantRoles(address(ungovernableGovernor), ungovernableERC20.DEFAULT_ADMIN_ROLE());
+        ungovernableERC20.renounceOwnership();
         vm.stopBroadcast();
     }
 }

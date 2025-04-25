@@ -2,8 +2,8 @@
 pragma solidity ^0.8.26;
 
 import {Test} from "forge-std/Test.sol";
-import {TurnkeyGovernor} from "../../src/TurnkeyGovernor.sol";
-import {TurnkeyERC20} from "../../src/TurnkeyERC20.sol";
+import {UngovernableGovernor} from "../../src/UngovernableGovernor.sol";
+import {UngovernableERC20} from "../../src/UngovernableERC20.sol";
 import {console} from "forge-std/console.sol";
 
 interface IERC20 {
@@ -12,8 +12,8 @@ interface IERC20 {
 }
 
 contract BaseTest is Test {
-    TurnkeyGovernor turnkeyGovernor;
-    TurnkeyERC20 turnkeyERC20;
+    UngovernableGovernor ungovernableGovernor;
+    UngovernableERC20 ungovernableERC20;
     Account initialOwner;
     Account admin1;
     Account admin2;
@@ -41,10 +41,10 @@ contract BaseTest is Test {
         vm.label(admin2.addr, "admin2");
 
         vm.prank(initialOwner.addr);
-        turnkeyERC20 = new TurnkeyERC20("ERC20", "ABC");
-        turnkeyGovernor = new TurnkeyGovernor(
+        ungovernableERC20 = new UngovernableERC20("ERC20", "ABC");
+        ungovernableGovernor = new UngovernableGovernor(
             "Governor",
-            turnkeyERC20,
+            ungovernableERC20,
             defaultQuorumPercentage,
             defaultVoteExtension,
             defaultVotingDelay,
@@ -53,7 +53,7 @@ contract BaseTest is Test {
         );
 
         vm.startPrank(initialOwner.addr);
-        turnkeyERC20.grantRoles(admin1.addr, turnkeyERC20.DEFAULT_ADMIN_ROLE());
+        ungovernableERC20.grantRoles(admin1.addr, ungovernableERC20.DEFAULT_ADMIN_ROLE());
         vm.stopPrank();
 
         alice = address(1);

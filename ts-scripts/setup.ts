@@ -126,7 +126,7 @@ function runInstallation() {
  * Main function
  */
 function main() {
-  console.log(colorize('Turnkey Governor Setup', 'blue'));
+  console.log(colorize('Ungovernable Governor Setup', 'blue'));
   console.log(colorize('=====================', 'blue'));
   
   const dependenciesOk = checkDependencies();

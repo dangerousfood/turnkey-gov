@@ -126,7 +126,7 @@ ${colors.yellow}Examples:${colors.reset}
   ts-node ts-scripts/verify-contracts.ts --chainId=11155111 --etherscan=YOUR_API_KEY --rpcUrl=https://sepolia.infura.io/v3/YOUR_PROJECT_ID
 
   # Verify specific contracts from a deployment
-  ts-node ts-scripts/verify-contracts.ts --chainId=1 --etherscan=YOUR_API_KEY --rpcUrl=https://mainnet.infura.io/v3/YOUR_PROJECT_ID --contracts=TurnkeyGovernor,TurnkeyERC20
+  ts-node ts-scripts/verify-contracts.ts --chainId=1 --etherscan=YOUR_API_KEY --rpcUrl=https://mainnet.infura.io/v3/YOUR_PROJECT_ID --contracts=UngovernableGovernor,UngovernableERC20
   `);
 };
 

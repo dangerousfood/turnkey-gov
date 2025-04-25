@@ -13,8 +13,8 @@ import {Votes, VotesExtended} from "@openzeppelin/contracts/governance/utils/Vot
 import {ERC20, ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
 
-/// @title TurnkeyGovernor is a boilerplate composition of the Governor contract set from OpenZeppelin
-contract TurnkeyGovernor is
+/// @title UngovernableGovernor is a boilerplate composition of the Governor contract set from OpenZeppelin
+contract UngovernableGovernor is
     Governor,
     GovernorVotes,
     GovernorSettings,
@@ -22,7 +22,7 @@ contract TurnkeyGovernor is
     GovernorVotesQuorumFraction,
     GovernorPreventLateQuorum
 {
-    /// @notice The constructor for TurnkeyGovernor
+    /// @notice The constructor for UngovernableGovernor
     /// @param _initialQuorumPercentage The quorum percentage for the governor (0-100) the minimum percentage of votes required to reach quorum for a proposal to succeed
     /// @param _initialVoteExtension The vote extension for the governor when a late quorum is reached, the proposal will be queued for an additional _voteExtension seconds
     /// @param _initialVotingDelay The initial voting delay before a proposal is voted on (seconds)

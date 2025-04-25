@@ -6,8 +6,8 @@ import {ERC20, ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {OwnableRoles} from "solady/src/auth/OwnableRoles.sol";
 
-/// @title TurnkeyERC20 is a simple ERC20 contract with a pauseable transfer function and blackisting
-contract TurnkeyERC20 is ERC20Votes, OwnableRoles {
+/// @title UngovernableERC20 is a simple ERC20 contract with a pauseable transfer function and blackisting
+contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     bool public isTransferPaused = true;
     /// @dev The error for when a transfer is attempted but transfers are paused (minting/burning is still allowed)
 
