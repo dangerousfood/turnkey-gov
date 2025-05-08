@@ -50,7 +50,9 @@ contract UngovernableGovernorTest is BaseTest {
             "Vote extension should be defaultVoteExtension"
         );
         assertEq(ungovernableGovernor.votingDelay(), defaultVotingDelay, "Voting delay should be defaultVotingDelay");
-        assertEq(ungovernableGovernor.votingPeriod(), defaultVotingPeriod, "Voting period should be defaultVotingPeriod");
+        assertEq(
+            ungovernableGovernor.votingPeriod(), defaultVotingPeriod, "Voting period should be defaultVotingPeriod"
+        );
         assertEq(
             ungovernableGovernor.proposalThreshold(),
             defaultProposalThreshold,
@@ -73,7 +75,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -106,7 +109,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -124,14 +128,18 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(alice)), false, "alice has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -149,7 +157,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), true, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Succeeded), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Succeeded),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);
@@ -176,7 +186,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -194,14 +205,18 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(alice)), false, "alice has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -219,7 +234,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), true, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Defeated), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Defeated),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);
@@ -245,7 +262,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -263,7 +281,9 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
@@ -271,7 +291,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(dan)), false, "dan has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -290,7 +312,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(dan)), false, "dan has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Defeated), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Defeated),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);
@@ -318,7 +342,8 @@ contract UngovernableGovernorTest is BaseTest {
         vm.warp(block.timestamp + 1); // make delegated votes active
 
         console.log("timestamp", block.timestamp);
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -336,7 +361,9 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
@@ -350,7 +377,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(dan)), false, "dan has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 0);
@@ -372,7 +401,8 @@ contract UngovernableGovernorTest is BaseTest {
         vm.startPrank(dan);
         vm.expectEmit();
         emit GovernorPreventLateQuorum.ProposalExtended(
-            proposalId, uint64(ungovernableGovernor.proposalDeadline(proposalId) + ungovernableGovernor.lateQuorumVoteExtension())
+            proposalId,
+            uint64(ungovernableGovernor.proposalDeadline(proposalId) + ungovernableGovernor.lateQuorumVoteExtension())
         );
         ungovernableGovernor.castVote(proposalId, 1);
         vm.stopPrank();
@@ -390,7 +420,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(dan)), true, "dan has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Succeeded), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Succeeded),
+            "proposal not succeeded"
         );
 
         vm.expectEmit();
@@ -415,7 +447,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -433,14 +466,18 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(alice)), false, "alice has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -458,7 +495,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), true, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Succeeded), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Succeeded),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);
@@ -486,7 +525,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -504,14 +544,18 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(alice)), false, "alice has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -529,7 +573,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), true, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Succeeded), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Succeeded),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);
@@ -557,7 +603,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -575,14 +622,18 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(alice)), false, "alice has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -600,7 +651,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), true, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Succeeded), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Succeeded),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);
@@ -629,7 +682,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -647,14 +701,18 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(alice)), false, "alice has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -672,12 +730,16 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), true, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Succeeded), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Succeeded),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);
         vm.expectEmit();
-        emit GovernorVotesQuorumFraction.QuorumNumeratorUpdated(ungovernableGovernor.quorumNumerator(), newQuorumPercentage);
+        emit GovernorVotesQuorumFraction.QuorumNumeratorUpdated(
+            ungovernableGovernor.quorumNumerator(), newQuorumPercentage
+        );
         vm.expectEmit();
         emit IGovernor.ProposalExecuted(proposalId);
         ungovernableGovernor.execute(targets, values, calldatas, keccak256(bytes(description)));
@@ -701,7 +763,8 @@ contract UngovernableGovernorTest is BaseTest {
 
         string memory description = "test";
         vm.warp(block.timestamp + 1); // make delegated votes active
-        uint256 proposalId = ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
+        uint256 proposalId =
+            ungovernableGovernor.hashProposal(targets, values, calldatas, keccak256(bytes(description)));
         vm.startPrank(alice);
         vm.expectEmit(address(ungovernableGovernor));
         emit IGovernor.ProposalCreated(
@@ -719,14 +782,18 @@ contract UngovernableGovernorTest is BaseTest {
         vm.stopPrank();
 
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Pending), "proposal not pending"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Pending),
+            "proposal not pending"
         );
         vm.warp(block.timestamp + ungovernableGovernor.votingDelay() + 1);
 
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(alice)), false, "alice has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), false, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), false, "charlie has voted");
-        assertEq(uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active");
+        assertEq(
+            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Active), "proposal not active"
+        );
 
         vm.prank(alice);
         ungovernableGovernor.castVote(proposalId, 1);
@@ -744,7 +811,9 @@ contract UngovernableGovernorTest is BaseTest {
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(bob)), true, "bob has voted");
         assertEq(ungovernableGovernor.hasVoted(proposalId, address(charlie)), true, "charlie has voted");
         assertEq(
-            uint8(ungovernableGovernor.state(proposalId)), uint8(IGovernor.ProposalState.Succeeded), "proposal not succeeded"
+            uint8(ungovernableGovernor.state(proposalId)),
+            uint8(IGovernor.ProposalState.Succeeded),
+            "proposal not succeeded"
         );
 
         vm.warp(block.timestamp + ungovernableGovernor.votingPeriod() + 1);

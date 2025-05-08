@@ -8,8 +8,8 @@
     "validate:env": "dotenv -e .env -- ts-node ts-scripts/validate-env.ts",
     "deploy:test": "ts-node ts-scripts/run-with-debug.ts deploy:test",
     "deploy:prod": "ts-node ts-scripts/run-with-debug.ts deploy:prod",
-    "verify": "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && ts-node ts-scripts/verify-contracts.ts --chainId $CHAIN_ID --etherscan $ETHERSCAN_API_KEY --rpcUrl $RPC_URL'",
-    "report": "forge coverage --no-match-test testFuzz --report lcov && genhtml -o report --branch-coverage lcov.info && rm lcov.info",
+    "verify": "dotenv -e .env -- bash -c 'ts-node ts-scripts/validate-env.ts && forge-verify --chainId $CHAIN_ID --etherscan $ETHERSCAN_API_KEY --rpcUrl $RPC_URL'",
+    "report": "forge coverage --no-match-test testFuzz --report lcov && perl -pi -e 's|#!/usr/bin/perl5.30|#!/usr/bin/perl|' $(which genhtml 2>/dev/null || echo /usr/local/Cellar/lcov/*/libexec/bin/genhtml) && genhtml -o report --branch-coverage lcov.info && rm lcov.info",
     "renounce:test": "ts-node ts-scripts/run-with-debug.ts renounce:test",
     "renounce:prod": "ts-node ts-scripts/run-with-debug.ts renounce:prod",
     "publish:tally": "ts-node ts-scripts/run-with-debug.ts publish:tally",
@@ -20,6 +20,7 @@
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^8.0.0",
+    "forge-verify": "^1.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },

@@ -73,7 +73,9 @@ contract Deploy is Script {
         vm.serializeString(ungovernableERC20Json, "_symbol", config.token._symbol);
 
         vm.serializeAddress(ungovernableGovernorJson, "_address", address(ungovernableGovernor));
-        vm.serializeUint(ungovernableGovernorJson, "_initialProposalThreshold", config.governor._initialProposalThreshold);
+        vm.serializeUint(
+            ungovernableGovernorJson, "_initialProposalThreshold", config.governor._initialProposalThreshold
+        );
         vm.serializeUint(ungovernableGovernorJson, "_initialQuorumPercentage", config.governor._initialQuorumPercentage);
         vm.serializeUint(ungovernableGovernorJson, "_initialVotingDelay", config.governor._initialVotingDelay);
         vm.serializeUint(ungovernableGovernorJson, "_initialVotingPeriod", config.governor._initialVotingPeriod);

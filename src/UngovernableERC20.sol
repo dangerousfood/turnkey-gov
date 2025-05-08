@@ -19,6 +19,8 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     uint256 public constant DEFAULT_ADMIN_ROLE = uint256(keccak256("DEFAULT_ADMIN_ROLE"));
     /// @dev The mapping of addresses to their blacklist status
     mapping(address => bool) public blacklist;
+    /// @dev The mapping of addresses to their whitelist status
+    mapping(address => bool) public whitelist;
 
     constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) EIP712(_name, "1") {
         _initializeOwner(msg.sender);
@@ -37,8 +39,9 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     /// @inheritdoc ERC20
     /// @notice Function is overidden to check if transfers are paused
     /// @notice When transfers are paused, minting/burning is still allowed
+    /// @notice When transfers are paused, only whitelisted addresses can transfer
     function _update(address from, address to, uint256 value) internal override {
-        if (from != address(0) && to != address(0) && isTransferPaused) {
+        if (from != address(0) && to != address(0) && isTransferPaused && !whitelist[from]) {
             assembly {
                 mstore(0x00, 0xcd1fda9f) // `TransferPaused()`.
                 revert(0x1c, 0x04)
@@ -67,5 +70,10 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     /// @notice Add/remove an address to the blacklist (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
     function toggleBlacklist(address _address) external onlyRoles(DEFAULT_ADMIN_ROLE) {
         blacklist[_address] = !blacklist[_address];
+    }
+
+    /// @notice Add/remove an address to the whitelist (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
+    function toggleWhitelist(address _address) external onlyRoles(DEFAULT_ADMIN_ROLE) {
+        whitelist[_address] = !whitelist[_address];
     }
 }
