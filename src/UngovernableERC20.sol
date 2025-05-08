@@ -41,7 +41,7 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     /// @notice When transfers are paused, minting/burning is still allowed
     /// @notice When transfers are paused, only whitelisted addresses can transfer
     function _update(address from, address to, uint256 value) internal override {
-        if (from != address(0) && to != address(0) && isTransferPaused && !whitelist[from]) {
+        if (isTransferPaused && !(from == address(0) || to == address(0) || whitelist[from])) {
             assembly {
                 mstore(0x00, 0xcd1fda9f) // `TransferPaused()`.
                 revert(0x1c, 0x04)
