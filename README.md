@@ -17,6 +17,8 @@ The Governor contract includes:
 - Configurable proposal threshold
 - Vote extension to prevent late quorum issues
 
+<span style="color:red">***Ungovernable does not feature a `Timelock`, `TimelockController`, or `Guardians` in the governance to ensure governance neutrality. In leu of those security features a `GovernorVotesQuorumFraction` and `GovernorPreventLateQuorum` have been added to prevent malicious voting behavior.***</span>
+
 ## Requirements
 - git
 - node
