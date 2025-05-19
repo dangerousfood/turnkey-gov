@@ -78,33 +78,33 @@ contract UngovernableERC20Test is BaseTest {
         assertEq(ungovernableERC20.clock(), block.timestamp, "clock is not correct");
     }
 
-    function test_toggleBlacklist_success() public {
+    function test_setBlacklist_success() public {
         vm.prank(admin1.addr);
-        ungovernableERC20.toggleBlacklist(address(2));
+        ungovernableERC20.setBlacklist(address(2), true);
         assertEq(ungovernableERC20.blacklist(address(2)), true, "address(2) should be blacklisted");
     }
 
-    function test_toggleWhitelist_success() public {
+    function test_setWhitelist_success() public {
         vm.prank(admin1.addr);
-        ungovernableERC20.toggleWhitelist(address(2));
+        ungovernableERC20.setWhitelist(address(2), true);
         assertEq(ungovernableERC20.whitelist(address(2)), true, "address(2) should be whitelisted");
     }
 
-    function test_toggleBlacklist_revert_Unauthorized() public {
+    function test_setBlacklist_revert_Unauthorized() public {
         vm.prank(address(2));
         vm.expectRevert(Ownable.Unauthorized.selector);
-        ungovernableERC20.toggleBlacklist(address(3));
+        ungovernableERC20.setBlacklist(address(3), true);
     }
 
-    function test_toggleWhitelist_revert_Unauthorized() public {
+    function test_setWhitelist_revert_Unauthorized() public {
         vm.prank(address(2));
         vm.expectRevert(Ownable.Unauthorized.selector);
-        ungovernableERC20.toggleWhitelist(address(3));
+        ungovernableERC20.setWhitelist(address(3), true);
     }
 
     function test_transfer_revert_Blacklisted() public {
         vm.prank(admin1.addr);
-        ungovernableERC20.toggleBlacklist(address(2));
+        ungovernableERC20.setBlacklist(address(2), true);
         vm.prank(admin1.addr);
         ungovernableERC20.enableTransfer();
         vm.prank(address(2));
@@ -114,7 +114,7 @@ contract UngovernableERC20Test is BaseTest {
 
     function test_transfer_success_Whitelisted() public {
         vm.prank(admin1.addr);
-        ungovernableERC20.toggleWhitelist(address(2));
+        ungovernableERC20.setWhitelist(address(2), true);
         vm.prank(address(1));
         ungovernableERC20.mint(address(2), 100);
         vm.prank(address(2));

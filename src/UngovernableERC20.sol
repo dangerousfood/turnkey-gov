@@ -6,7 +6,7 @@ import {ERC20, ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {OwnableRoles} from "solady/src/auth/OwnableRoles.sol";
 
-/// @title UngovernableERC20 is a simple ERC20 contract with a pauseable transfer function and blackisting
+/// @title UngovernableERC20 is a simple ERC20 contract with a pauseable transfer function and blacklisting
 contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     bool public isTransferPaused = true;
     /// @dev The error for when a transfer is attempted but transfers are paused (minting/burning is still allowed)
@@ -68,12 +68,12 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     }
 
     /// @notice Add/remove an address to the blacklist (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
-    function toggleBlacklist(address _address) external onlyRoles(DEFAULT_ADMIN_ROLE) {
-        blacklist[_address] = !blacklist[_address];
+    function setBlacklist(address _address, bool _isBlacklisted) external onlyRoles(DEFAULT_ADMIN_ROLE) {
+        blacklist[_address] = _isBlacklisted;
     }
 
     /// @notice Add/remove an address to the whitelist (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
-    function toggleWhitelist(address _address) external onlyRoles(DEFAULT_ADMIN_ROLE) {
-        whitelist[_address] = !whitelist[_address];
+    function setWhitelist(address _address, bool _isWhitelisted) external onlyRoles(DEFAULT_ADMIN_ROLE) {
+        whitelist[_address] = _isWhitelisted;
     }
 }
