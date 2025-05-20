@@ -15,8 +15,8 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
     /// @dev The error for when a transfer is attempted but the address is blacklisted
     error Blacklisted();
 
-    /// @dev The role for the DEFAULT_ADMIN_ROLE, controls enabling transfers and adding/removing addresses from the blacklist
-    uint256 public constant DEFAULT_ADMIN_ROLE = uint256(keccak256("DEFAULT_ADMIN_ROLE"));
+    /// @dev The role for the DEFAULT_ADMIN_ROLE controls enabling transfers, adding/removing addresses from the blacklist and whitelist
+    uint256 public constant DEFAULT_ADMIN_ROLE = _ROLE_0;
     /// @dev The mapping of addresses to their blacklist status
     mapping(address => bool) public blacklist;
     /// @dev The mapping of addresses to their whitelist status
@@ -26,8 +26,8 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
         _initializeOwner(msg.sender);
     }
 
-    /// @notice Enable transfers (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
-    function enableTransfer() external onlyRoles(DEFAULT_ADMIN_ROLE) {
+    /// @notice Enable transfers (restricted to DEFAULT_ADMIN_ROLE and owner)
+    function enableTransfer() external onlyRolesOrOwner(DEFAULT_ADMIN_ROLE) {
         isTransferPaused = false;
     }
 
@@ -67,13 +67,13 @@ contract UngovernableERC20 is ERC20Votes, OwnableRoles {
         return uint48(block.timestamp);
     }
 
-    /// @notice Add/remove an address to the blacklist (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
-    function setBlacklist(address _address, bool _isBlacklisted) external onlyRoles(DEFAULT_ADMIN_ROLE) {
+    /// @notice Add/remove an address to the blacklist (restricted to DEFAULT_ADMIN_ROLE and owner)
+    function setBlacklist(address _address, bool _isBlacklisted) external onlyRolesOrOwner(DEFAULT_ADMIN_ROLE) {
         blacklist[_address] = _isBlacklisted;
     }
 
-    /// @notice Add/remove an address to the whitelist (restricted to DEFAULT_ADMIN_ROLE assignable by owner)
-    function setWhitelist(address _address, bool _isWhitelisted) external onlyRoles(DEFAULT_ADMIN_ROLE) {
+    /// @notice Add/remove an address to the whitelist (restricted to DEFAULT_ADMIN_ROLE and owner)
+    function setWhitelist(address _address, bool _isWhitelisted) external onlyRolesOrOwner(DEFAULT_ADMIN_ROLE) {
         whitelist[_address] = _isWhitelisted;
     }
 }

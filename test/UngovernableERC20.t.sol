@@ -84,8 +84,20 @@ contract UngovernableERC20Test is BaseTest {
         assertEq(ungovernableERC20.blacklist(address(2)), true, "address(2) should be blacklisted");
     }
 
+    function test_setBlacklist_owner_success() public {
+        vm.prank(address(1));
+        ungovernableERC20.setBlacklist(address(2), true);
+        assertEq(ungovernableERC20.blacklist(address(2)), true, "address(2) should be blacklisted");
+    }
+
     function test_setWhitelist_success() public {
         vm.prank(admin1.addr);
+        ungovernableERC20.setWhitelist(address(2), true);
+        assertEq(ungovernableERC20.whitelist(address(2)), true, "address(2) should be whitelisted");
+    }
+
+    function test_setWhitelist_owner_success() public {
+        vm.prank(address(1));
         ungovernableERC20.setWhitelist(address(2), true);
         assertEq(ungovernableERC20.whitelist(address(2)), true, "address(2) should be whitelisted");
     }
