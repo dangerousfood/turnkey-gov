@@ -7,6 +7,3 @@
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/dangerousfood/openzeppelin-contracts.git
-[submodule "lib/TReentrancyGuard"]
-	path = lib/TReentrancyGuard
-	url = https://github.com/dangerousfood/TReentrancyGuard

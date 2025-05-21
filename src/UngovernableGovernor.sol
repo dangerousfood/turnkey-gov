@@ -6,11 +6,8 @@ import {GovernorCountingSimple} from "@openzeppelin/contracts/governance/extensi
 import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import {GovernorVotesQuorumFraction} from
     "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
-import {SafeTransferLib} from "solady/src/utils/SafeTransferLib.sol";
 import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
 import {GovernorPreventLateQuorum} from "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.sol";
-import {Votes, VotesExtended} from "@openzeppelin/contracts/governance/utils/VotesExtended.sol";
-import {ERC20, ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
 
 /// @title UngovernableGovernor is a boilerplate composition of the Governor contract set from OpenZeppelin

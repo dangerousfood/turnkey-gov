@@ -70,6 +70,22 @@ contract UngovernableERC20Test is BaseTest {
         assertEq(ungovernableERC20.balanceOf(address(2)), 100, "Balance of address(2) should be 100");
     }
 
+    function test_burn_revert_Unauthorized() public {
+        vm.prank(address(2));
+        vm.expectRevert(Ownable.Unauthorized.selector);
+        ungovernableERC20.burn(address(3), 100);
+    }
+
+    function test_burn_success() public {
+        // transfer is paused
+        vm.prank(address(1));
+        ungovernableERC20.mint(address(3), 100);
+        assertEq(ungovernableERC20.balanceOf(address(3)), 100, "Balance of address(2) should be 100");
+        vm.prank(address(1));
+        ungovernableERC20.burn(address(3), 100);
+        assertEq(ungovernableERC20.balanceOf(address(3)), 0, "Balance of address(3) should be 0");
+    }
+
     function test_CLOCK_MODE_success() public {
         assertEq(ungovernableERC20.CLOCK_MODE(), "mode=timestamp", "CLOCKMODE is not correct");
     }
@@ -79,24 +95,32 @@ contract UngovernableERC20Test is BaseTest {
     }
 
     function test_setBlacklist_success() public {
+        vm.expectEmit();
+        emit UngovernableERC20.Blacklist(address(2), true);
         vm.prank(admin1.addr);
         ungovernableERC20.setBlacklist(address(2), true);
         assertEq(ungovernableERC20.blacklist(address(2)), true, "address(2) should be blacklisted");
     }
 
     function test_setBlacklist_owner_success() public {
+        vm.expectEmit();
+        emit UngovernableERC20.Blacklist(address(2), true);
         vm.prank(address(1));
         ungovernableERC20.setBlacklist(address(2), true);
         assertEq(ungovernableERC20.blacklist(address(2)), true, "address(2) should be blacklisted");
     }
 
     function test_setWhitelist_success() public {
+        vm.expectEmit();
+        emit UngovernableERC20.Whitelist(address(2), true);
         vm.prank(admin1.addr);
         ungovernableERC20.setWhitelist(address(2), true);
         assertEq(ungovernableERC20.whitelist(address(2)), true, "address(2) should be whitelisted");
     }
 
     function test_setWhitelist_owner_success() public {
+        vm.expectEmit();
+        emit UngovernableERC20.Whitelist(address(2), true);
         vm.prank(address(1));
         ungovernableERC20.setWhitelist(address(2), true);
         assertEq(ungovernableERC20.whitelist(address(2)), true, "address(2) should be whitelisted");
@@ -115,6 +139,8 @@ contract UngovernableERC20Test is BaseTest {
     }
 
     function test_transfer_revert_Blacklisted() public {
+        vm.expectEmit();
+        emit UngovernableERC20.Blacklist(address(2), true);
         vm.prank(admin1.addr);
         ungovernableERC20.setBlacklist(address(2), true);
         vm.prank(admin1.addr);
@@ -125,6 +151,8 @@ contract UngovernableERC20Test is BaseTest {
     }
 
     function test_transfer_success_Whitelisted() public {
+        vm.expectEmit();
+        emit UngovernableERC20.Whitelist(address(2), true);
         vm.prank(admin1.addr);
         ungovernableERC20.setWhitelist(address(2), true);
         vm.prank(address(1));
