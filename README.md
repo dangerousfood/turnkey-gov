@@ -57,11 +57,11 @@ Edit the `deploy.config.json` file:
 ```json
 {
   "governor": {
-    "_initialProposalThreshold": 1000000000000000000, 
-    "_initialQuorumPercentage": 4, 
-    "_initialVoteExtension": 172800, 
-    "_initialVotingDelay": 86400, 
-    "_initialVotingPeriod": 604800, 
+    "_initialProposalThreshold": 10000000000000000000000000,
+    "_initialQuorumPercentage": 5,
+    "_initialVoteExtension": 172800,
+    "_initialVotingDelay": 86400,
+    "_initialVotingPeriod": 604800,
     "_name": "Ungovernable Governor"
   },
   "token": {
