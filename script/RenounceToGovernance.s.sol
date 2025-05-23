@@ -64,7 +64,7 @@ contract RenounceToGovernance is Script {
         UngovernableERC20 ungovernableERC20 = UngovernableERC20(config.token._address);
         UngovernableGovernor ungovernableGovernor = UngovernableGovernor(payable(config.governor._address));
 
-        vm.startBroadcast();
+        vm.startBroadcast(vm.envUint("PRIVATE_KEY"));
         ungovernableERC20.grantRoles(address(ungovernableGovernor), ungovernableERC20.DEFAULT_ADMIN_ROLE());
         ungovernableERC20.renounceOwnership();
         vm.stopBroadcast();

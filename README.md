@@ -17,6 +17,8 @@ The Governor contract includes:
 - Configurable proposal threshold
 - Vote extension to prevent late quorum issues
 
+<span style="color:red">***Ungovernable does not feature a `Timelock`, `TimelockController`, or `Guardians` in the governance to ensure governance neutrality. In leu of those security features a `GovernorVotesQuorumFraction` and `GovernorPreventLateQuorum` have been added to prevent malicious voting behavior.***</span>
+
 ## Requirements
 - git
 - node
@@ -55,11 +57,11 @@ Edit the `deploy.config.json` file:
 ```json
 {
   "governor": {
-    "_initialProposalThreshold": 1000000000000000000, 
-    "_initialQuorumPercentage": 4, 
-    "_initialVoteExtension": 172800, 
-    "_initialVotingDelay": 86400, 
-    "_initialVotingPeriod": 604800, 
+    "_initialProposalThreshold": 10000000000000000000000000,
+    "_initialQuorumPercentage": 5,
+    "_initialVoteExtension": 172800,
+    "_initialVotingDelay": 86400,
+    "_initialVotingPeriod": 604800,
     "_name": "Ungovernable Governor"
   },
   "token": {
